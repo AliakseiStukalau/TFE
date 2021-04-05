@@ -30,6 +30,8 @@ public:
 	float BaseLookUpRate;
 
 protected:
+    
+    void ReportLocation();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();

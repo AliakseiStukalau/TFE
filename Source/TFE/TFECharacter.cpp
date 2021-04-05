@@ -74,8 +74,16 @@ void ATFECharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATFECharacter::OnResetVR);
+    
+    PlayerInputComponent->BindAction("ReportLocation", IE_Pressed, this, &ATFECharacter::ReportLocation);
 }
 
+void ATFECharacter::ReportLocation()
+{
+    FVector location = GetActorLocation();
+    
+    //UE_LOG(LogTemp, Display, L"Player location: %s", *location.ToString());
+}
 
 void ATFECharacter::OnResetVR()
 {
