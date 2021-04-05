@@ -72,3 +72,9 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Starter Content
+Content/StarterContent/*
+
+# Mac OS stuff
+.DS_Store
