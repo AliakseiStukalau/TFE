@@ -82,7 +82,7 @@ void ATFECharacter::ReportLocation()
 {
     FVector location = GetActorLocation();
     
-    //UE_LOG(LogTemp, Display, L"Player location: %s", *location.ToString());
+    UE_LOG(LogTemp, Display, TEXT("Player location: %s"), *(location.ToString()));
 }
 
 void ATFECharacter::OnResetVR()
