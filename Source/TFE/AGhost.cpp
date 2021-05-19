@@ -15,6 +15,8 @@ AAGhost::AAGhost()
 void AAGhost::BeginPlay()
 {
 	Super::BeginPlay();
+
+	this->GetController();
 	
 }
 
