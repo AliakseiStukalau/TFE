@@ -1,10 +1,16 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TFECharacter.h"
+#include "AFireplace.h"
+#include "AWoodenTrunk.h"
+#include "Engine/World.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+
+#include "DrawDebugHelpers.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -20,6 +26,10 @@ ATFECharacter::ATFECharacter()
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
+
+	GrabDistance = 450;
+	IsCloseToGrabbableObject = false;
+	IsHolding = false;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -43,8 +53,16 @@ ATFECharacter::ATFECharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PlayerPhysicsHandle"));
+
+	GrabLocation = CreateDefaultSubobject<USceneComponent>(TEXT("GrabLocation"));
+	GrabLocation->SetupAttachment(RootComponent);
+	GrabLocation->SetRelativeLocation(FVector(150.0, 0.0, 60.0));
+	
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,6 +96,13 @@ void ATFECharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
     PlayerInputComponent->BindAction("ReportLocation", IE_Pressed, this, &ATFECharacter::ReportLocation);
 }
 
+void ATFECharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	UpdateGrabbedObject();
+}
+
 void ATFECharacter::ReportLocation()
 {
     FVector location = GetActorLocation();
@@ -104,6 +129,66 @@ void ATFECharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location
 void ATFECharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		StopJumping();
+}
+
+void ATFECharacter::HandleReleaseObject()
+{
+	if (Cast<AAWoodenTrunk>(TrunkPhysicsObject->GetOwner()))
+	{
+		OnDropTrunk.Broadcast();
+
+		PhysicsHandle->ReleaseComponent();
+
+		TrunkPhysicsObject->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+		TrunkPhysicsObject->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
+	}
+}
+
+bool ATFECharacter::HandleGrabObject()
+{
+	bool isSuccessTraceAndGrab = false;
+
+	if (IsCloseToGrabbableObject)
+	{
+		FHitResult hitResult;
+		FVector startLocation = FollowCamera->GetComponentLocation();
+		FVector endLocation = startLocation + (GrabDistance * FollowCamera->GetForwardVector());
+
+		const FName traceTag("MyTraceTag");
+		GetWorld()->DebugDrawTraceTag = traceTag;
+
+		FCollisionQueryParams queryParams;
+		queryParams.bDebugQuery = true;
+		queryParams.AddIgnoredActor(this);
+		queryParams.TraceTag = traceTag;
+		
+		DrawDebugLine(GetWorld(), startLocation, endLocation, FColor::Red, false, 3, 0, 1.0f);
+
+		if (GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECollisionChannel::ECC_Camera, queryParams))
+		{
+			if (PhysicsHandle && Cast<AAWoodenTrunk>(hitResult.Actor.Get()))
+			{
+				TrunkPhysicsObject = hitResult.Component.Get();
+
+				PhysicsHandle->GrabComponentAtLocation(TrunkPhysicsObject, "None", hitResult.Location);
+
+				TrunkPhysicsObject->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+				TrunkPhysicsObject->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+				isSuccessTraceAndGrab = true;
+			}
+		}
+	}
+
+	return isSuccessTraceAndGrab;
+}
+
+void ATFECharacter::UpdateGrabbedObject()
+{
+	if (IsHolding && PhysicsHandle)
+	{
+		PhysicsHandle->SetTargetLocationAndRotation(GrabLocation->GetComponentLocation(), GetControlRotation());
+	}
 }
 
 void ATFECharacter::TurnAtRate(float Rate)

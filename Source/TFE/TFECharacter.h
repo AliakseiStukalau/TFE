@@ -4,11 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "TFECharacter.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDropTrunkDelegate);
+
 
 UCLASS(config=Game)
 class ATFECharacter : public ACharacter
 {
+
 	GENERATED_BODY()
 
 	/** Camera boom positioning the camera behind the character */
@@ -18,7 +24,10 @@ class ATFECharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+
 public:
+
 	ATFECharacter();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -31,6 +40,27 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool HasWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPrimitiveComponent *TrunkPhysicsObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USceneComponent* GrabLocation;
+
+	//UPROPERTY(BlueprintReadOnly)
+	class UPhysicsHandleComponent* PhysicsHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsCloseToGrabbableObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float GrabDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsHolding;
+
+
+	FDropTrunkDelegate OnDropTrunk;
 
 protected:
     
@@ -63,10 +93,21 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
+	UFUNCTION(BlueprintCallable)
+	void HandleReleaseObject();
+
+	UFUNCTION(BlueprintCallable)
+	bool HandleGrabObject();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateGrabbedObject();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -75,3 +116,9 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
 
+
+
+class UMyPH : public UPhysicsHandleComponent
+{
+
+};

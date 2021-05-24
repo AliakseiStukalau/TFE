@@ -15,14 +15,14 @@ AAWoodenTrunk::AAWoodenTrunk()
 	TrunkMesh->SetLinearDamping(1);
 	TrunkMesh->SetAngularDamping(2);
 	TrunkMesh->SetCollisionProfileName("PhysicsActor");
-
-	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
-
-	FTransform transform(FRotator(0.0, 0.0, 0.0), FVector(74.0, 0.0, 14.0), FVector(2.75, 1.0, 0.75));
-	BoxCollision->SetRelativeTransform(transform);
-
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/Meshes/wooden_rotten_trunk.wooden_rotten_trunk'"));
 	TrunkMesh->SetStaticMesh(MeshAsset.Object);
+	RootComponent = TrunkMesh;
+
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BoxCollision->SetupAttachment(RootComponent);
+	FTransform transform(FRotator(0.0, 0.0, 0.0), FVector(74.0, 0.0, 14.0), FVector(2.75, 1.0, 0.75));
+	BoxCollision->SetRelativeTransform(transform);
 }
 
 // Called when the game starts or when spawned

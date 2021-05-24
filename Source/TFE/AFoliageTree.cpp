@@ -14,6 +14,7 @@ AAFoliageTree::AAFoliageTree()
 
 
 	TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeMesh_"));
+	RootComponent = TreeMesh;
 }
 
 // Called when the game starts or when spawned

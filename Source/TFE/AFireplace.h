@@ -6,7 +6,19 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Engine/EngineTypes.h"
 #include "AFireplace.generated.h"
+
+UENUM(BlueprintType)
+enum class FireIntensityState : uint8
+{
+	None = 0 UMETA(DisplayName = "None"),
+	Smoke = 1 UMETA(DisplayName = "Smoke"),
+	Low = 2 UMETA(DisplayName = "Low"),
+	Middle = 3 UMETA(DisplayName = "Middle"),
+	Full = 4 UMETA(DisplayName = "Full")
+};
+
 
 UCLASS()
 class TFE_API AAFireplace : public AActor
@@ -26,6 +38,23 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void DisableEmmiters();
+
+	void ResetFire();
+
+	void SetFullPower();
+
+	void SetMiddlePower();
+
+	void SetLowPower();
+
+	void SetSmoke();
+
+	void DecreaseFire();
+
+	UFUNCTION()
+	void OnDropTrunk();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USceneComponent* Scene;
 
@@ -37,4 +66,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* ParticleSystemFire;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FireIntensityState FireState;
+
+protected:
+
+	FTimerHandle DecreaseFireTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float FireDecreaseTime;
 };
