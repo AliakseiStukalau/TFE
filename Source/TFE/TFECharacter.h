@@ -9,6 +9,7 @@
 #include "TFECharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDropTrunkDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHideTipDelegate);
 
 
 UCLASS(config=Game)
@@ -61,6 +62,7 @@ public:
 
 
 	FDropTrunkDelegate OnDropTrunk;
+	FHideTipDelegate OnHideTip;
 
 protected:
     
@@ -92,6 +94,8 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	void Grab();
 
 	UFUNCTION(BlueprintCallable)
 	void HandleReleaseObject();

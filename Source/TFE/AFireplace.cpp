@@ -133,6 +133,7 @@ void AAFireplace::DecreaseFire()
 		break;
 	}
 
+	OnFireChange.Broadcast();
 }
 
 void AAFireplace::OnDropTrunk()
@@ -146,6 +147,7 @@ void AAFireplace::OnDropTrunk()
 		if (pTrunk)
 		{
 			ResetFire();
+			OnFireChange.Broadcast();
 
 			FTimerHandle    handle;
 			GetWorld()->GetTimerManager().SetTimer(handle, [pTrunk]() {

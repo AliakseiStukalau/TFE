@@ -93,7 +93,8 @@ void ATFECharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATFECharacter::OnResetVR);
     
-    PlayerInputComponent->BindAction("ReportLocation", IE_Pressed, this, &ATFECharacter::ReportLocation);
+	PlayerInputComponent->BindAction("ReportLocation", IE_Pressed, this, &ATFECharacter::ReportLocation);
+	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &ATFECharacter::Grab);
 }
 
 void ATFECharacter::Tick(float DeltaSeconds)
@@ -129,6 +130,25 @@ void ATFECharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location
 void ATFECharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		StopJumping();
+}
+
+void ATFECharacter::Grab()
+{
+	if (IsHolding)
+	{
+		HandleReleaseObject();
+		IsHolding = false;
+	}
+	else
+	{
+		if (HandleGrabObject())
+		{
+			IsHolding = true;
+			OnHideTip.Broadcast();
+		}
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("Player location:"));
 }
 
 void ATFECharacter::HandleReleaseObject()

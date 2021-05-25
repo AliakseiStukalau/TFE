@@ -9,6 +9,10 @@
 #include "Engine/EngineTypes.h"
 #include "AFireplace.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireChangeDelegate);
+
+
 UENUM(BlueprintType)
 enum class FireIntensityState : uint8
 {
@@ -70,6 +74,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FireIntensityState FireState;
 
+
+	FFireChangeDelegate OnFireChange;
 protected:
 
 	FTimerHandle DecreaseFireTimerHandle;

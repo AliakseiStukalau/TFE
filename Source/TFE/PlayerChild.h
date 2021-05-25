@@ -20,6 +20,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void InitFireplace();
+
+	UFUNCTION()
+	void CalcHitPointsDelta();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -30,6 +35,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float HitPoints;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HitPointsChangePerSecond;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AAFireplace* Fireplace;
