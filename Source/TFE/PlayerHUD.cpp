@@ -2,10 +2,11 @@
 
 
 #include "PlayerHUD.h"
+#include "TFECharacter.h"
 
 APlayerHUD::APlayerHUD()
 {
-
+    //CurrentTipId = TipId::None;
 }
 
 void APlayerHUD::DrawHUD()
@@ -26,6 +27,33 @@ void APlayerHUD::BeginPlay()
             ChildHealthWidget->AddToViewport();
         }
     }
+
+    if (TipWidgetClass)
+    {
+        TipWidget = CreateWidget<UTipWidget>(GetWorld(), TipWidgetClass);
+
+        if (TipWidget)
+        {
+            TipWidget->AddToViewport();
+        }
+    }
+
+    if (StaticTipsWidgetClass)
+    {
+        StaticTipsWidget = CreateWidget<UStaticTipsWidget>(GetWorld(), StaticTipsWidgetClass);
+
+        if (StaticTipsWidget)
+        {
+            StaticTipsWidget->AddToViewport();
+        }
+    }
+
+    ATFECharacter* pPlayer = Cast<ATFECharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+    if (pPlayer)
+    {
+        pPlayer->OnShowTip.AddDynamic(this, &APlayerHUD::ShowTipWidget);
+        pPlayer->OnHideTip.AddDynamic(this, &APlayerHUD::HideTipWidget);
+    }
 }
 
 void APlayerHUD::Tick(float DeltaSeconds)
@@ -40,5 +68,26 @@ void APlayerHUD::UpdateHealthWidget()
     if (ChildHealthWidget)
     {
         ChildHealthWidget->UpdatPercent();
+    }
+}
+
+void APlayerHUD::ShowTipWidget(UObject* pTip)
+{
+    UTip* tipObj = dynamic_cast<UTip*>(pTip);
+    CurrentTipId = tipObj->GetId();
+
+    if (TipWidget)
+    {
+        FText text = tipObj->GetText();
+        TipWidget->ShowTip(text);
+    }
+}
+
+void APlayerHUD::HideTipWidget(TipId tipId)
+{
+    if (TipWidget && tipId == CurrentTipId)
+    {
+        TipWidget->HideTip();
+        CurrentTipId = TipId::None;
     }
 }

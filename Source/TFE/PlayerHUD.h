@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "ChildHealthWidget.h"
+#include "TipWidget.h"
+#include "HUD/Tip.h"
+#include "HUD/StaticTipsWidget.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/HUD.h"
 #include "PlayerHUD.generated.h"
@@ -27,9 +30,26 @@ public:
 	UFUNCTION()
 	void UpdateHealthWidget();
 
+	UFUNCTION()
+	void ShowTipWidget(UObject *pTip);
+
+	UFUNCTION()
+	void HideTipWidget(TipId tipId);
+
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> ChildHealthWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> TipWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UStaticTipsWidget> StaticTipsWidgetClass;
+
 private:
 	UChildHealthWidget* ChildHealthWidget;
+	UTipWidget* TipWidget;
+	UStaticTipsWidget* StaticTipsWidget;
+
+	TipId CurrentTipId;
 };

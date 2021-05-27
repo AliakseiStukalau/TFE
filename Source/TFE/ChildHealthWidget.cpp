@@ -38,7 +38,7 @@ void UChildHealthWidget::UpdatPercent()
                 HealthPercentTxt->SetColorAndOpacity(FSlateColor(FLinearColor(1.0, 1.0, 1.0)));
 
             FNumberFormattingOptions options;
-            options.MaximumFractionalDigits = 1;
+            options.MaximumFractionalDigits = 0;
             //HealthPercentTxt->SetText(FText::FromString(FString::SanitizeFloat(percent.FloatValue)));
             HealthPercentTxt->SetText(FText::AsNumber(Child->HitPoints, &options));
         }

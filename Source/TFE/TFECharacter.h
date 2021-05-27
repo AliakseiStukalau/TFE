@@ -5,11 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "HUD/Tip.h"
 #include "Components/PrimitiveComponent.h"
+#include "Components/BoxComponent.h"
 #include "TFECharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDropTrunkDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHideTipDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHideTipDelegate, TipId, tipId);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowTipDelegate, UObject*, tip);
 
 
 UCLASS(config=Game)
@@ -26,7 +29,6 @@ class ATFECharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-
 public:
 
 	ATFECharacter();
@@ -41,6 +43,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool HasWeapon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UBoxComponent* BoxCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPrimitiveComponent *TrunkPhysicsObject;
@@ -63,6 +68,7 @@ public:
 
 	FDropTrunkDelegate OnDropTrunk;
 	FHideTipDelegate OnHideTip;
+	FShowTipDelegate OnShowTip;
 
 protected:
     
@@ -106,12 +112,25 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void UpdateGrabbedObject();
 
+	UFUNCTION()
+	void CharacterCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
 	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void BeginPlay() override;
 
 public:
 	/** Returns CameraBoom subobject **/

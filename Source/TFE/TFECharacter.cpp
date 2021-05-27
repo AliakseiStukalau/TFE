@@ -3,6 +3,9 @@
 #include "TFECharacter.h"
 #include "AFireplace.h"
 #include "AWoodenTrunk.h"
+#include "Axe.h"
+#include "HUD/GetAxeTip.h"
+#include "HUD/GrabTip.h"
 #include "Engine/World.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -59,6 +62,10 @@ ATFECharacter::ATFECharacter()
 	GrabLocation->SetupAttachment(RootComponent);
 	GrabLocation->SetRelativeLocation(FVector(150.0, 0.0, 60.0));
 	
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BoxCollision->SetupAttachment(RootComponent);
+	BoxCollision->SetRelativeScale3D(FVector(2.75, 1.75, 3.0));
+	BoxCollision->SetRelativeLocation(FVector(50.0, 0.0, -10.0));
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -104,6 +111,21 @@ void ATFECharacter::Tick(float DeltaSeconds)
 	UpdateGrabbedObject();
 }
 
+void ATFECharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	OnShowTip.Broadcast(NewObject<UGetAxeTip>());
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::CharacterCapsuleBeginOverlap);
+
+	if (BoxCollision)
+	{
+		BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::BoxCollisionBeginOverlap);
+		BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ATFECharacter::BoxCollisionEndOverlap);
+	}
+}
+
 void ATFECharacter::ReportLocation()
 {
     FVector location = GetActorLocation();
@@ -144,11 +166,10 @@ void ATFECharacter::Grab()
 		if (HandleGrabObject())
 		{
 			IsHolding = true;
-			OnHideTip.Broadcast();
+			OnHideTip.Broadcast(NewObject<UGrabTip>()->GetId());
 		}
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("Player location:"));
 }
 
 void ATFECharacter::HandleReleaseObject()
@@ -208,6 +229,54 @@ void ATFECharacter::UpdateGrabbedObject()
 	if (IsHolding && PhysicsHandle)
 	{
 		PhysicsHandle->SetTargetLocationAndRotation(GrabLocation->GetComponentLocation(), GetControlRotation());
+	}
+}
+
+void ATFECharacter::CharacterCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AAxe* pAxe = Cast<AAxe>(OtherActor);
+
+	if (pAxe)
+	{
+		FAttachmentTransformRules attachmentRules(EAttachmentRule::SnapToTarget,
+			EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
+		pAxe->AttachToComponent(GetMesh(), attachmentRules, FName("weapon_r"));
+
+		HasWeapon = true;
+
+		OnHideTip.Broadcast(NewObject<UGetAxeTip>()->GetId());
+	}
+}
+
+void ATFECharacter::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(OtherActor);
+
+	if (pTrunk)
+	{
+		if (pTrunk->GetRootComponent()->IsSimulatingPhysics())
+		{
+			OnShowTip.Broadcast(NewObject<UGrabTip>());
+			IsCloseToGrabbableObject = true;
+		}
+	}
+	else
+	{
+		OnHideTip.Broadcast(NewObject<UGrabTip>()->GetId());
+	}
+}
+
+void ATFECharacter::BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(OtherActor);
+
+	if (pTrunk)
+	{
+		OnHideTip.Broadcast(NewObject<UGrabTip>()->GetId());
+		IsCloseToGrabbableObject = false;
 	}
 }
 
