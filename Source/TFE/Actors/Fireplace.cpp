@@ -1,16 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "AFireplace.h"
-#include "AWoodenTrunk.h"
+#include "Fireplace.h"
+#include "WoodenTrunk.h"
 #include "Kismet/GameplayStatics.h"
 #include "TFECharacter.h"
 
 // Sets default values
-AAFireplace::AAFireplace()
+AFireplace::AFireplace()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	FireDecreaseTime = 10; //sec
 
 	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));
@@ -36,7 +33,7 @@ AAFireplace::AAFireplace()
 }
 
 // Called when the game starts or when spawned
-void AAFireplace::BeginPlay()
+void AFireplace::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -44,23 +41,20 @@ void AAFireplace::BeginPlay()
 	
 	if (pPlayer)
 	{
-		pPlayer->OnDropTrunk.AddDynamic(this, &AAFireplace::OnDropTrunk);
-
-		//UE_LOG(LogTemp, Display, TEXT("Player location:="));
-
+		pPlayer->OnDropTrunk.AddDynamic(this, &AFireplace::OnDropTrunk);
 		ResetFire();
+		OnFireChange.Broadcast();
 	}
 
 }
 
 // Called every frame
-void AAFireplace::Tick(float DeltaTime)
+void AFireplace::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void AAFireplace::DisableEmmiters()
+void AFireplace::DisableEmmiters()
 {
 	ParticleSystemFire->SetEmitterEnable("Smoke", false);
 	ParticleSystemFire->SetEmitterEnable("Low", false);
@@ -70,16 +64,16 @@ void AAFireplace::DisableEmmiters()
 	FireState = FireIntensityState::None;
 }
 
-void AAFireplace::ResetFire()
+void AFireplace::ResetFire()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DecreaseFireTimerHandle);
 
 	SetFullPower();
 
-	GetWorld()->GetTimerManager().SetTimer(DecreaseFireTimerHandle, this, &AAFireplace::DecreaseFire, FireDecreaseTime, true);
+	GetWorld()->GetTimerManager().SetTimer(DecreaseFireTimerHandle, this, &AFireplace::DecreaseFire, FireDecreaseTime, true);
 }
 
-void AAFireplace::SetFullPower()
+void AFireplace::SetFullPower()
 {
 	DisableEmmiters();
 
@@ -88,7 +82,7 @@ void AAFireplace::SetFullPower()
 	FireState = FireIntensityState::Full;
 }
 
-void AAFireplace::SetMiddlePower()
+void AFireplace::SetMiddlePower()
 {
 	DisableEmmiters();
 
@@ -97,7 +91,7 @@ void AAFireplace::SetMiddlePower()
 	FireState = FireIntensityState::Middle;
 }
 
-void AAFireplace::SetLowPower()
+void AFireplace::SetLowPower()
 {
 	DisableEmmiters();
 
@@ -106,7 +100,7 @@ void AAFireplace::SetLowPower()
 	FireState = FireIntensityState::Low;
 }
 
-void AAFireplace::SetSmoke()
+void AFireplace::SetSmoke()
 {
 	DisableEmmiters();
 
@@ -115,7 +109,7 @@ void AAFireplace::SetSmoke()
 	FireState = FireIntensityState::Smoke;
 }
 
-void AAFireplace::DecreaseFire()
+void AFireplace::DecreaseFire()
 {
 	switch (FireState)
 	{
@@ -136,13 +130,13 @@ void AAFireplace::DecreaseFire()
 	OnFireChange.Broadcast();
 }
 
-void AAFireplace::OnDropTrunk()
+void AFireplace::OnDropTrunk()
 {
 	ATFECharacter* pPlayer = Cast<ATFECharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	if (pPlayer && pPlayer->TrunkPhysicsObject->IsOverlappingActor(this))
 	{
-		AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(pPlayer->TrunkPhysicsObject->GetOwner());
+		AWoodenTrunk* pTrunk = Cast<AWoodenTrunk>(pPlayer->TrunkPhysicsObject->GetOwner());
 
 		if (pTrunk)
 		{

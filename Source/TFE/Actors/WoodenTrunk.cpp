@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AWoodenTrunk.h"
+#include "WoodenTrunk.h"
 
 // Sets default values
-AAWoodenTrunk::AAWoodenTrunk()
+AWoodenTrunk::AWoodenTrunk()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -26,14 +26,14 @@ AAWoodenTrunk::AAWoodenTrunk()
 }
 
 // Called when the game starts or when spawned
-void AAWoodenTrunk::BeginPlay()
+void AWoodenTrunk::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AAWoodenTrunk::Tick(float DeltaTime)
+void AWoodenTrunk::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	

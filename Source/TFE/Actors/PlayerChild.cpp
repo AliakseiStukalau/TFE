@@ -36,10 +36,10 @@ void APlayerChild::InitFireplace()
 	if (Fireplace == nullptr)
 	{
 		TArray<AActor*> foundActors;
-		TSubclassOf<AAFireplace> actorToFind = AAFireplace::StaticClass();
+		TSubclassOf<AFireplace> actorToFind = AFireplace::StaticClass();
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), actorToFind, foundActors);
 		if (foundActors.Num() > 0)
-			Fireplace = Cast<AAFireplace>(foundActors[0]);
+			Fireplace = Cast<AFireplace>(foundActors[0]);
 	}
 }
 

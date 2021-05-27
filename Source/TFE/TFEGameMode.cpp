@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TFEGameMode.h"
-#include "TFECharacter.h"
+#include "Actors/TFECharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATFEGameMode::ATFEGameMode()

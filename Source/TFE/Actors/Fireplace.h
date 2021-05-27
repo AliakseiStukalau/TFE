@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,7 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Engine/EngineTypes.h"
-#include "AFireplace.generated.h"
+#include "Fireplace.generated.h"
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireChangeDelegate);
@@ -25,14 +23,14 @@ enum class FireIntensityState : uint8
 
 
 UCLASS()
-class TFE_API AAFireplace : public AActor
+class TFE_API AFireplace : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 
 	// Sets default values for this actor's properties
-	AAFireplace();
+	AFireplace();
 
 protected:
 	// Called when the game starts or when spawned

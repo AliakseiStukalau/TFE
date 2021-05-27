@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TFECharacter.h"
-#include "AFireplace.h"
-#include "AWoodenTrunk.h"
+#include "Fireplace.h"
+#include "WoodenTrunk.h"
 #include "Axe.h"
-#include "HUD/GetAxeTip.h"
-#include "HUD/GrabTip.h"
+#include "../HUD/GetAxeTip.h"
+#include "../HUD/GrabTip.h"
 #include "Engine/World.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -178,7 +178,7 @@ void ATFECharacter::Grab()
 
 void ATFECharacter::HandleReleaseObject()
 {
-	if (Cast<AAWoodenTrunk>(TrunkPhysicsObject->GetOwner()))
+	if (Cast<AWoodenTrunk>(TrunkPhysicsObject->GetOwner()))
 	{
 		OnDropTrunk.Broadcast();
 
@@ -211,7 +211,7 @@ bool ATFECharacter::HandleGrabObject()
 
 		if (GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECollisionChannel::ECC_Camera, queryParams))
 		{
-			if (PhysicsHandle && Cast<AAWoodenTrunk>(hitResult.Actor.Get()))
+			if (PhysicsHandle && Cast<AWoodenTrunk>(hitResult.Actor.Get()))
 			{
 				TrunkPhysicsObject = hitResult.Component.Get();
 
@@ -301,7 +301,7 @@ void ATFECharacter::OnCharacterCapsuleBeginOverlap(UPrimitiveComponent* Overlapp
 void ATFECharacter::OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(OtherActor);
+	AWoodenTrunk* pTrunk = Cast<AWoodenTrunk>(OtherActor);
 
 	if (pTrunk)
 	{
@@ -320,7 +320,7 @@ void ATFECharacter::OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedCo
 void ATFECharacter::OnBoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(OtherActor);
+	AWoodenTrunk* pTrunk = Cast<AWoodenTrunk>(OtherActor);
 
 	if (pTrunk)
 	{

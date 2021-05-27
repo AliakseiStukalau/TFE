@@ -4,35 +4,33 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AFoliageTree.generated.h"
+#include "Components/BoxComponent.h"
+#include "WoodenTrunk.generated.h"
+
 
 UCLASS()
-class TFE_API AAFoliageTree : public AActor
+class TFE_API AWoodenTrunk : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+
 	// Sets default values for this actor's properties
-	AAFoliageTree();
+	AWoodenTrunk();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	virtual void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 
-
-protected:
-
-	float RespawnTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMeshComponent* TrunkMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* TreeMesh;
+	UBoxComponent *BoxCollision;
 
 };

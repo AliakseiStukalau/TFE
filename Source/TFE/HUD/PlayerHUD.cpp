@@ -2,7 +2,7 @@
 
 
 #include "PlayerHUD.h"
-#include "TFECharacter.h"
+#include "../Actors/TFECharacter.h"
 
 APlayerHUD::APlayerHUD()
 {

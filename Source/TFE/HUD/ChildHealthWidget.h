@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerChild.h"
+#include "../Actors/PlayerChild.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "Blueprint/UserWidget.h"
 #include "ChildHealthWidget.generated.h"

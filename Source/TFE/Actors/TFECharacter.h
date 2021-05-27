@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
-#include "HUD/Tip.h"
+#include "../HUD/Tip.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/BoxComponent.h"
 #include "TFECharacter.generated.h"

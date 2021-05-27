@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "AGhost.generated.h"
+#include "Ghost.generated.h"
 
 UCLASS()
-class TFE_API AAGhost : public ACharacter
+class TFE_API AGhost : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AAGhost();
+	AGhost();
 
 protected:
 	// Called when the game starts or when spawned

@@ -4,41 +4,35 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AFireplace.h"
-#include "PlayerChild.generated.h"
+#include "FoliageTree.generated.h"
 
 UCLASS()
-class TFE_API APlayerChild : public AActor
+class TFE_API AFoliageTree : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlayerChild();
+	AFoliageTree();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void InitFireplace();
-
 	UFUNCTION()
-	void CalcHitPointsDelta();
+	virtual void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* ChildMesh;
+
+protected:
+
+	float RespawnTime;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float HitPoints;
+	UStaticMeshComponent* TreeMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float HitPointsChangePerSecond;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AAFireplace* Fireplace;
 };

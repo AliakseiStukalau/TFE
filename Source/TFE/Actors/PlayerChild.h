@@ -4,22 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "AWoodenTrunk.generated.h"
+#include "Fireplace.h"
+#include "PlayerChild.generated.h"
 
 UCLASS()
-class TFE_API AAWoodenTrunk : public AActor
+class TFE_API APlayerChild : public AActor
 {
 	GENERATED_BODY()
 	
-public:
-
+public:	
 	// Sets default values for this actor's properties
-	AAWoodenTrunk();
+	APlayerChild();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void InitFireplace();
+
+	UFUNCTION()
+	void CalcHitPointsDelta();
 
 public:	
 	// Called every frame
@@ -27,9 +31,14 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* TrunkMesh;
+	UStaticMeshComponent* ChildMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBoxComponent *BoxCollision;
+	float HitPoints;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HitPointsChangePerSecond;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AFireplace* Fireplace;
 };
