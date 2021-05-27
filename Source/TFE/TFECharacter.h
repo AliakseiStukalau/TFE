@@ -41,8 +41,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool HasWeapon;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* BoxCollision;
@@ -53,17 +51,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USceneComponent* GrabLocation;
 
-	//UPROPERTY(BlueprintReadOnly)
 	class UPhysicsHandleComponent* PhysicsHandle;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool IsCloseToGrabbableObject;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float GrabDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsHolding;
+	bool HasWeapon;
+	bool IsCloseToGrabbableObject;
+	bool IsFirstPersonView;
 
 
 	FDropTrunkDelegate OnDropTrunk;
@@ -113,16 +109,29 @@ protected:
 	void UpdateGrabbedObject();
 
 	UFUNCTION()
-	void CharacterCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	void ChangePersonView();
+
+	UFUNCTION()
+	void SetFirstPersonView();
+
+	UFUNCTION()
+	void SetThirdPersonView();
+
+	UFUNCTION()
+	void OnCharacterCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	void OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	void OnBoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void OnCaracterCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

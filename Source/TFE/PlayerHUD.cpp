@@ -6,7 +6,7 @@
 
 APlayerHUD::APlayerHUD()
 {
-    //CurrentTipId = TipId::None;
+    CurrentTipId = TipId::None;
 }
 
 void APlayerHUD::DrawHUD()

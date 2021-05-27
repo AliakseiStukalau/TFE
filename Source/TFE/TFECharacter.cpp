@@ -11,6 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #include "DrawDebugHelpers.h"
 
@@ -33,6 +34,8 @@ ATFECharacter::ATFECharacter()
 	GrabDistance = 450;
 	IsCloseToGrabbableObject = false;
 	IsHolding = false;
+	HasWeapon = false;
+	IsFirstPersonView = false;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -69,7 +72,6 @@ ATFECharacter::ATFECharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -100,8 +102,9 @@ void ATFECharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATFECharacter::OnResetVR);
     
-	PlayerInputComponent->BindAction("ReportLocation", IE_Pressed, this, &ATFECharacter::ReportLocation);
-	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &ATFECharacter::Grab);
+	PlayerInputComponent->BindAction("ReportLocation", EInputEvent::IE_Pressed, this, &ATFECharacter::ReportLocation);
+	PlayerInputComponent->BindAction("Grab", EInputEvent::IE_Pressed, this, &ATFECharacter::Grab);
+	PlayerInputComponent->BindAction("ChangeView", EInputEvent::IE_Pressed, this, &ATFECharacter::ChangePersonView);
 }
 
 void ATFECharacter::Tick(float DeltaSeconds)
@@ -117,12 +120,13 @@ void ATFECharacter::BeginPlay()
 
 	OnShowTip.Broadcast(NewObject<UGetAxeTip>());
 
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::CharacterCapsuleBeginOverlap);
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::OnCharacterCapsuleBeginOverlap);
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ATFECharacter::OnCaracterCapsuleHit);
 
 	if (BoxCollision)
 	{
-		BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::BoxCollisionBeginOverlap);
-		BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ATFECharacter::BoxCollisionEndOverlap);
+		BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::OnBoxCollisionBeginOverlap);
+		BoxCollision->OnComponentEndOverlap.AddDynamic(this, &ATFECharacter::OnBoxCollisionEndOverlap);
 	}
 }
 
@@ -232,7 +236,52 @@ void ATFECharacter::UpdateGrabbedObject()
 	}
 }
 
-void ATFECharacter::CharacterCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void ATFECharacter::ChangePersonView()
+{
+	if (IsFirstPersonView)
+	{
+		SetThirdPersonView();
+		IsFirstPersonView = false;
+
+		GrabDistance += GetCameraBoom()->TargetArmLength;
+	}
+	else
+	{
+		SetFirstPersonView();
+		IsFirstPersonView = true;
+
+		GrabDistance -= GetCameraBoom()->TargetArmLength;
+	}
+}
+
+void ATFECharacter::SetFirstPersonView()
+{
+	FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true);
+	GetFollowCamera()->AttachToComponent(GetMesh(), rules, "head");
+	GetFollowCamera()->AddLocalOffset(FVector(-10.0, 26.0, 0.0), false, nullptr, ETeleportType::TeleportPhysics);
+	GetFollowCamera()->AddLocalRotation(FRotator(-90.0, 0.0, 0.0).Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
+	GetFollowCamera()->AddLocalRotation(FRotator(0.0, 90.0, 0.0).Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
+
+	bUseControllerRotationYaw = true;
+}
+
+void ATFECharacter::SetThirdPersonView()
+{
+	bUseControllerRotationYaw = false;
+
+	FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true);
+	GetFollowCamera()->AttachToComponent(GetCameraBoom(), rules, "head");
+
+	FRotator deltaRotation(GetCapsuleComponent()->GetRelativeRotation().Pitch * (-1), 0, 0);
+	GetCapsuleComponent()->AddLocalRotation(deltaRotation.Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
+
+	GetFollowCamera()->AddLocalRotation(FRotator(90.0, -90.0, 0).Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
+
+	FVector deltaLocation = GetFollowCamera()->GetRelativeLocation() * (-1);
+	GetFollowCamera()->AddLocalOffset(deltaLocation, false, nullptr, ETeleportType::TeleportPhysics);
+}
+
+void ATFECharacter::OnCharacterCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AAxe* pAxe = Cast<AAxe>(OtherActor);
@@ -249,7 +298,7 @@ void ATFECharacter::CharacterCapsuleBeginOverlap(UPrimitiveComponent* Overlapped
 	}
 }
 
-void ATFECharacter::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void ATFECharacter::OnBoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(OtherActor);
@@ -268,7 +317,7 @@ void ATFECharacter::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 	}
 }
 
-void ATFECharacter::BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void ATFECharacter::OnBoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	AAWoodenTrunk* pTrunk = Cast<AAWoodenTrunk>(OtherActor);
@@ -278,6 +327,15 @@ void ATFECharacter::BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedCompon
 		OnHideTip.Broadcast(NewObject<UGrabTip>()->GetId());
 		IsCloseToGrabbableObject = false;
 	}
+}
+
+void ATFECharacter::OnCaracterCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	FString actorName = UKismetSystemLibrary::GetDisplayName(OtherActor);
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Cyan, actorName);
+
 }
 
 void ATFECharacter::TurnAtRate(float Rate)
