@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Components/PointLightComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Engine/EngineTypes.h"
 #include "Fireplace.generated.h"
@@ -71,6 +72,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FireIntensityState FireState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPointLightComponent *PointLightOuter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPointLightComponent* PointLightInner;
 
 
 	FFireChangeDelegate OnFireChange;
