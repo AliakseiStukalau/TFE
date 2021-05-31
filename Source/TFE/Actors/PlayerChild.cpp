@@ -11,7 +11,7 @@ APlayerChild::APlayerChild()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ChildMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ChildMesh"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshAsset(TEXT("StaticMesh'/Game/Meshes/1M_Cube.1M_Cube'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshAsset(TEXT("StaticMesh'/Game/Meshes/SittingChildMesh.SittingChildMesh'"));
 	ChildMesh->SetStaticMesh(meshAsset.Object);
 	RootComponent = ChildMesh;
 	HitPoints = 50;
