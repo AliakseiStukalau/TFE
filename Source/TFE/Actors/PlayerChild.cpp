@@ -3,6 +3,7 @@
 
 #include "PlayerChild.h"
 #include "TFECharacter.h"
+#include "../HUD/LoseWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -50,17 +51,17 @@ void APlayerChild::CalcHitPointsDelta()
 	{
 		switch (Fireplace->FireState)
 		{
-		case FireIntensityState::Full:
+		case EFireIntensityState::Full:
 			HitPointsChangePerSecond = 3;
 			break;
-		case FireIntensityState::Middle:
+		case EFireIntensityState::Middle:
 			HitPointsChangePerSecond = 1;
 			break;
-		case FireIntensityState::Low:
+		case EFireIntensityState::Low:
 			HitPointsChangePerSecond = 0;
 			break;
-		case FireIntensityState::Smoke:
-		case FireIntensityState::None:
+		case EFireIntensityState::Smoke:
+		case EFireIntensityState::None:
 		default:
 			HitPointsChangePerSecond = -2;
 			break;
@@ -85,7 +86,7 @@ void APlayerChild::Tick(float DeltaTime)
 
 		if(pPlayer)
 		{
-			pPlayer->OnPlayerLose.Broadcast();
+			pPlayer->OnPlayerLose.Broadcast(EPlayerLoseCause::ChildHasFrozen);
 		}
 	}
 }

@@ -6,14 +6,14 @@
 #include "GameFramework/Character.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "../HUD/Tip.h"
-#include "Components/PrimitiveComponent.h"
+#include "../HUD/LoseWidget.h"
 #include "Components/BoxComponent.h"
 #include "TFECharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDropTrunkDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHideTipDelegate, TipId, tipId);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowTipDelegate, UObject*, tip);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerLoseDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerLoseDelegate, EPlayerLoseCause, loseCause);
 
 
 UCLASS(config=Game)
@@ -150,11 +150,4 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-};
-
-
-
-class UMyPH : public UPhysicsHandleComponent
-{
-
 };

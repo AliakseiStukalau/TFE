@@ -75,7 +75,7 @@ void AFireplace::DisableEmmiters()
     ParticleSystemFire->SetEmitterEnable("Middle", false);
     ParticleSystemFire->SetEmitterEnable("Full", false);
 
-    FireState = FireIntensityState::None;
+    FireState = EFireIntensityState::None;
 }
 
 void AFireplace::ResetFire()
@@ -100,7 +100,7 @@ void AFireplace::SetFullPower()
     PointLightInner->SetIntensity(3000);
     PointLightInner->SetAttenuationRadius(270);
 
-    FireState = FireIntensityState::Full;
+    FireState = EFireIntensityState::Full;
 }
 
 void AFireplace::SetMiddlePower()
@@ -116,7 +116,7 @@ void AFireplace::SetMiddlePower()
     PointLightInner->SetIntensity(2000);
     PointLightInner->SetAttenuationRadius(200);
 
-    FireState = FireIntensityState::Middle;
+    FireState = EFireIntensityState::Middle;
 }
 
 void AFireplace::SetLowPower()
@@ -132,7 +132,7 @@ void AFireplace::SetLowPower()
     PointLightInner->SetIntensity(1500);
     PointLightInner->SetAttenuationRadius(200);
 
-    FireState = FireIntensityState::Low;
+    FireState = EFireIntensityState::Low;
 }
 
 void AFireplace::SetSmoke()
@@ -146,22 +146,22 @@ void AFireplace::SetSmoke()
     PointLightInner->SetIntensity(300);
     PointLightInner->SetAttenuationRadius(200);
 
-    FireState = FireIntensityState::Smoke;
+    FireState = EFireIntensityState::Smoke;
 }
 
 void AFireplace::DecreaseFire()
 {
     switch (FireState)
     {
-    case FireIntensityState::Middle:
+    case EFireIntensityState::Middle:
         SetLowPower();
         break;
-    case FireIntensityState::Full:
+    case EFireIntensityState::Full:
         SetMiddlePower();
         break;
-    case FireIntensityState::None:
-    case FireIntensityState::Smoke:
-    case FireIntensityState::Low:
+    case EFireIntensityState::None:
+    case EFireIntensityState::Smoke:
+    case EFireIntensityState::Low:
     default:
         SetSmoke();
         break;

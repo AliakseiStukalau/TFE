@@ -2,7 +2,6 @@
 
 
 #include "PlayerHUD.h"
-#include "../Actors/TFECharacter.h"
 
 APlayerHUD::APlayerHUD()
 {
@@ -93,11 +92,12 @@ void APlayerHUD::HideTipWidget(TipId tipId)
     }
 }
 
-void APlayerHUD::ShowYouLoseWidget()
+void APlayerHUD::ShowYouLoseWidget(EPlayerLoseCause loseCause)
 {
     if (YouLoseWidgetClass)
     {
         YouLoseWidget = CreateWidget<ULoseWidget>(GetWorld(), YouLoseWidgetClass);
+        YouLoseWidget->LoseCause = loseCause;
 
         if (YouLoseWidget)
         {

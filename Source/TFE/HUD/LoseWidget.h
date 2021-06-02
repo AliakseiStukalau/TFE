@@ -7,9 +7,13 @@
 #include "Components/Button.h"
 #include "LoseWidget.generated.h"
 
-/**
- * 
- */
+UENUM(BlueprintType)
+enum class EPlayerLoseCause : uint8
+{
+	KilledByGhost = 0 UMETA(DisplayName = "KilledByGhost"),
+	ChildHasFrozen = 1 UMETA(DisplayName = "ChildHasFrozen")
+};
+
 UCLASS()
 class TFE_API ULoseWidget : public UUserWidget
 {
@@ -32,4 +36,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	UButton* ButtonQuit;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	EPlayerLoseCause LoseCause;
 };

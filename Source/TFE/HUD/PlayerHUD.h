@@ -8,13 +8,12 @@
 #include "LoseWidget.h"
 #include "Tip.h"
 #include "StaticTipsWidget.h"
+#include "../Actors/TFECharacter.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/HUD.h"
 #include "PlayerHUD.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class TFE_API APlayerHUD : public AHUD
 {
@@ -38,7 +37,7 @@ public:
 	void HideTipWidget(TipId tipId);
 
 	UFUNCTION()
-    void ShowYouLoseWidget();
+    void ShowYouLoseWidget(EPlayerLoseCause loseCause);
 
 
 	UPROPERTY(EditDefaultsOnly)

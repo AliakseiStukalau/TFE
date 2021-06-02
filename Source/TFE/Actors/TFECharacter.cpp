@@ -340,7 +340,7 @@ void ATFECharacter::OnCaracterCapsuleHit(UPrimitiveComponent* HitComponent, AAct
 
     if(Cast<AGhost>(OtherActor))
     {
-        OnPlayerLose.Broadcast();
+        OnPlayerLose.Broadcast(EPlayerLoseCause::KilledByGhost);
     }
 }
 

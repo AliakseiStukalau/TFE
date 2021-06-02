@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireChangeDelegate);
 
 
 UENUM(BlueprintType)
-enum class FireIntensityState : uint8
+enum class EFireIntensityState : uint8
 {
 	None = 0 UMETA(DisplayName = "None"),
 	Smoke = 1 UMETA(DisplayName = "Smoke"),
@@ -71,7 +71,7 @@ public:
 	UParticleSystemComponent* ParticleSystemFire;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FireIntensityState FireState;
+	EFireIntensityState FireState;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPointLightComponent *PointLightOuter;
