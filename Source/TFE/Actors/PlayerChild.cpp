@@ -49,18 +49,18 @@ void APlayerChild::CalcHitPointsDelta()
         switch (Fireplace->FireState)
         {
         case EFireIntensityState::Full:
-            HitPointsChangePerSecond = 3;
+            HitPointsChangePerSecond = 2;
             break;
         case EFireIntensityState::Middle:
             HitPointsChangePerSecond = 1;
             break;
         case EFireIntensityState::Low:
-            HitPointsChangePerSecond = 0;
+            HitPointsChangePerSecond = -1;
             break;
         case EFireIntensityState::Smoke:
         case EFireIntensityState::None:
         default:
-            HitPointsChangePerSecond = -2;
+            HitPointsChangePerSecond = -4;
             break;
         }
     }

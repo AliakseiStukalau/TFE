@@ -8,7 +8,7 @@ AFireplace::AFireplace()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-    FireDecreaseTime = 10; //sec
+    FireDecreaseTime = 7; //sec
 
     Scene = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));
     RootComponent = Scene;

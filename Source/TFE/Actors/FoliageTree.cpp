@@ -7,7 +7,7 @@ AFoliageTree::AFoliageTree()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-    RespawnTime = 120; //sec
+    RespawnTime = 600; //sec
 
     TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeMesh_"));
     RootComponent = TreeMesh;
