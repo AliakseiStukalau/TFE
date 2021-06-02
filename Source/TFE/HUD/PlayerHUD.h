@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ChildHealthWidget.h"
 #include "TipWidget.h"
+#include "LoseWidget.h"
 #include "Tip.h"
 #include "StaticTipsWidget.h"
 #include "Components/WidgetComponent.h"
@@ -36,6 +37,9 @@ public:
 	UFUNCTION()
 	void HideTipWidget(TipId tipId);
 
+	UFUNCTION()
+    void ShowYouLoseWidget();
+
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> ChildHealthWidgetClass;
@@ -46,10 +50,15 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UStaticTipsWidget> StaticTipsWidgetClass;
 
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ULoseWidget> YouLoseWidgetClass;
+
 private:
 	UChildHealthWidget* ChildHealthWidget;
 	UTipWidget* TipWidget;
 	UStaticTipsWidget* StaticTipsWidget;
+	ULoseWidget* YouLoseWidget;
 
 	TipId CurrentTipId;
 };

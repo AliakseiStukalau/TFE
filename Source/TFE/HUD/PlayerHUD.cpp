@@ -53,6 +53,7 @@ void APlayerHUD::BeginPlay()
     {
         pPlayer->OnShowTip.AddDynamic(this, &APlayerHUD::ShowTipWidget);
         pPlayer->OnHideTip.AddDynamic(this, &APlayerHUD::HideTipWidget);
+        pPlayer->OnPlayerLose.AddDynamic(this, &APlayerHUD::ShowYouLoseWidget);
     }
 }
 
@@ -89,5 +90,18 @@ void APlayerHUD::HideTipWidget(TipId tipId)
     {
         TipWidget->HideTip();
         CurrentTipId = TipId::None;
+    }
+}
+
+void APlayerHUD::ShowYouLoseWidget()
+{
+    if (YouLoseWidgetClass)
+    {
+        YouLoseWidget = CreateWidget<ULoseWidget>(GetWorld(), YouLoseWidgetClass);
+
+        if (YouLoseWidget)
+        {
+            YouLoseWidget->AddToViewport();
+        }
     }
 }

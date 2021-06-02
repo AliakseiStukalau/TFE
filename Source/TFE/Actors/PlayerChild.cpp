@@ -2,6 +2,7 @@
 
 
 #include "PlayerChild.h"
+#include "TFECharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -80,7 +81,12 @@ void APlayerChild::Tick(float DeltaTime)
 	if (HitPoints <= 0)
 	{
 		HitPoints = 0;
-		//You loose
+		ATFECharacter* pPlayer = Cast<ATFECharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+		if(pPlayer)
+		{
+			pPlayer->OnPlayerLose.Broadcast();
+		}
 	}
 }
 

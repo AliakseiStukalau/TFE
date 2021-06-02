@@ -13,6 +13,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDropTrunkDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHideTipDelegate, TipId, tipId);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowTipDelegate, UObject*, tip);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerLoseDelegate);
 
 
 UCLASS(config=Game)
@@ -65,8 +66,11 @@ public:
 	FDropTrunkDelegate OnDropTrunk;
 	FHideTipDelegate OnHideTip;
 	FShowTipDelegate OnShowTip;
+	FPlayerLoseDelegate OnPlayerLose;
 
 protected:
+
+	void PauseGame();
     
     void ReportLocation();
 
