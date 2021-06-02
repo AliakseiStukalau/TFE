@@ -1,10 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "TipWidget.h"
 
 
-UTipWidget::UTipWidget(const FObjectInitializer& objectInitialiser) : Super(objectInitialiser)
+UTipWidget::UTipWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
 }
 

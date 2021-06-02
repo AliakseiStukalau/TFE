@@ -14,19 +14,19 @@ AFireplace::AFireplace()
     RootComponent = Scene;
 
     FireplaceMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FireplaceMesh"));
-    ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/Meshes/Campfire/Campfire1.Campfire1'"));
+    const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/Meshes/Campfire/Campfire1.Campfire1'"));
     FireplaceMesh->SetStaticMesh(MeshAsset.Object);
-    FTransform fireTransform(FRotator(0.0, 0.0, 0.0), FVector(0.0, 0.0, 0.0), FVector(0.3, 0.3, 0.3));
+    const FTransform fireTransform(FRotator(0.0, 0.0, 0.0), FVector(0.0, 0.0, 0.0), FVector(0.3, 0.3, 0.3));
     FireplaceMesh->SetRelativeTransform(fireTransform);
     FireplaceMesh->SetupAttachment(RootComponent);
 
     BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
-    FTransform boxTransform(FRotator(0.0, 0.0, 0.0), FVector(0.0, 0.0, 76.0), FVector(2.75, 2.5, 2.75));
+    const FTransform boxTransform(FRotator(0.0, 0.0, 0.0), FVector(0.0, 0.0, 76.0), FVector(2.75, 2.5, 2.75));
     BoxCollision->SetRelativeTransform(boxTransform);
     BoxCollision->SetupAttachment(RootComponent);
 
 
-    ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/ParticleSystems/PS_Fire.PS_Fire'"));
+    const ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/ParticleSystems/PS_Fire.PS_Fire'"));
     ParticleSystemFire = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FirePS"));
     ParticleSystemFire->SetTemplate(PS.Object);
     ParticleSystemFire->SetupAttachment(RootComponent);
@@ -59,7 +59,6 @@ void AFireplace::BeginPlay()
         ResetFire();
         OnFireChange.Broadcast();
     }
-
 }
 
 // Called every frame
@@ -68,7 +67,7 @@ void AFireplace::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void AFireplace::DisableEmmiters()
+void AFireplace::DisableEmitters()
 {
     ParticleSystemFire->SetEmitterEnable("Smoke", false);
     ParticleSystemFire->SetEmitterEnable("Low", false);
@@ -89,10 +88,10 @@ void AFireplace::ResetFire()
 
 void AFireplace::SetFullPower()
 {
-    DisableEmmiters();
+    DisableEmitters();
 
     ParticleSystemFire->SetEmitterEnable("Full", true);
-    
+
     PointLightOuter->SetRelativeLocation(FVector(0.0, -30.0, 300.0));
     PointLightOuter->SetIntensity(8500);
     PointLightOuter->SetAttenuationRadius(600);
@@ -105,10 +104,10 @@ void AFireplace::SetFullPower()
 
 void AFireplace::SetMiddlePower()
 {
-    DisableEmmiters();
+    DisableEmitters();
 
     ParticleSystemFire->SetEmitterEnable("Middle", true);
-    
+
     PointLightOuter->SetRelativeLocation(FVector(0.0, -30.0, 230.0));
     PointLightOuter->SetIntensity(5500);
     PointLightOuter->SetAttenuationRadius(420);
@@ -121,10 +120,10 @@ void AFireplace::SetMiddlePower()
 
 void AFireplace::SetLowPower()
 {
-    DisableEmmiters();
+    DisableEmitters();
 
     ParticleSystemFire->SetEmitterEnable("Low", true);
-    
+
     PointLightOuter->SetRelativeLocation(FVector(0.0, -30.0, 135.0));
     PointLightOuter->SetIntensity(1500);
     PointLightOuter->SetAttenuationRadius(300);
@@ -137,7 +136,7 @@ void AFireplace::SetLowPower()
 
 void AFireplace::SetSmoke()
 {
-    DisableEmmiters();
+    DisableEmitters();
 
     ParticleSystemFire->SetEmitterEnable("Smoke", true);
 
@@ -187,7 +186,6 @@ void AFireplace::OnDropTrunk()
             GetWorld()->GetTimerManager().SetTimer(handle, [pTrunk]() {
                 pTrunk->Destroy();
                 }, 2, false);
-
         }
     }
 }

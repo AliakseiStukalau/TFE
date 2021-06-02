@@ -13,7 +13,7 @@ EBTNodeResult::Type UCheckIsFarFromInitLocation::ExecuteTask(UBehaviorTreeCompon
 
     if(pGhost && pBlackboard)
     {
-        float distance = (pGhost->GetActorLocation() - pBlackboard->GetValueAsVector(InitialLocation.SelectedKeyName)).Size();
+        const float distance = (pGhost->GetActorLocation() - pBlackboard->GetValueAsVector(InitialLocation.SelectedKeyName)).Size();
 
         if (pBlackboard->GetValueAsBool(CanSeePlayerKey.SelectedKeyName))
         {
@@ -31,7 +31,6 @@ EBTNodeResult::Type UCheckIsFarFromInitLocation::ExecuteTask(UBehaviorTreeCompon
             {
                 pBlackboard->SetValueAsBool(IsTooFarFromInitLocationKey.SelectedKeyName, true);
                 pBlackboard->SetValueAsBool(CanSeePlayerKey.SelectedKeyName, true);
-
             }
             else
                 return EBTNodeResult::Type::Succeeded;

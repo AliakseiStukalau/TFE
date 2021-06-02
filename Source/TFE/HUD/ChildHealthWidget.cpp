@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "ChildHealthWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Containers/Array.h"
@@ -8,7 +5,6 @@
 
 UChildHealthWidget::UChildHealthWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-
 }
 
 void UChildHealthWidget::NativeConstruct()
@@ -21,7 +17,7 @@ void UChildHealthWidget::NativeConstruct()
         Child = Cast<APlayerChild>(foundActors[0]);
 }
 
-void UChildHealthWidget::UpdatPercent()
+void UChildHealthWidget::UpdatePercent()
 {
     if (Child)
     {

@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -17,17 +15,16 @@ enum class TipId : uint8
 UCLASS()
 class TFE_API UTip : public UObject
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
     UTip() { };
     UTip(FText text, TipId id) : TipText(text), Id(id) {}
 
-    TipId GetId() { return Id; }
-    FText GetText() { return TipText; }
+    TipId GetId();
+    FText GetText();
 
 protected:
     FText TipText;
-
     TipId Id;
 };

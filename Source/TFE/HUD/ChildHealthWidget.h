@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,29 +6,27 @@
 #include "Blueprint/UserWidget.h"
 #include "ChildHealthWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class TFE_API UChildHealthWidget : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
 
-	UChildHealthWidget(const FObjectInitializer& ObjectInitializer);
+    UChildHealthWidget(const FObjectInitializer& ObjectInitializer);
 
-	virtual void NativeConstruct() override;
+    virtual void NativeConstruct() override;
 
-	UFUNCTION()
-	void UpdatPercent();
+    UFUNCTION()
+    void UpdatePercent();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* HealthPercentTxt;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UTextBlock* HealthPercentTxt;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UProgressBar* HealthPercentBar;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UProgressBar* HealthPercentBar;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	APlayerChild* Child;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    APlayerChild* Child;
 };

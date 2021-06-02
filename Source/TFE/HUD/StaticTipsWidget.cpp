@@ -1,14 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "StaticTipsWidget.h"
 
-UStaticTipsWidget::UStaticTipsWidget(const FObjectInitializer& objectInitialiser) : Super(objectInitialiser)
+UStaticTipsWidget::UStaticTipsWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
 }
 
 void UStaticTipsWidget::NativeConstruct()
 {
     Super::NativeConstruct();
-
 }

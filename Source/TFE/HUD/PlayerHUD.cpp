@@ -1,7 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "PlayerHUD.h"
+#include "../Actors/TFECharacter.h"
 
 APlayerHUD::APlayerHUD()
 {
@@ -67,7 +66,7 @@ void APlayerHUD::UpdateHealthWidget()
 {
     if (ChildHealthWidget)
     {
-        ChildHealthWidget->UpdatPercent();
+        ChildHealthWidget->UpdatePercent();
     }
 }
 

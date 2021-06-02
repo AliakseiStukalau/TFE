@@ -52,18 +52,12 @@ void AGhost::BeginPlay()
     AAIController* aic = Cast<AAIController>(this->GetController());
     Blackboard = (aic->GetBlackboardComponent());
 
-    if(Blackboard)
+    if (Blackboard)
     {
         InitialLocation = this->GetActorLocation();
         Blackboard->SetValueAsVector("InitialLocation", this->GetActorLocation());
         Blackboard->ClearValue("IsTooFarFromInitialLocation");
     }
-}
-
-// Called every frame
-void AGhost::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
 }
 
 void AGhost::OnTargetPerceptionUpd(AActor* Actor, FAIStimulus Stimulus)
@@ -76,7 +70,7 @@ void AGhost::OnTargetPerceptionUpd(AActor* Actor, FAIStimulus Stimulus)
                 GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Cyan, "Here you are!!");
 
             GetCharacterMovement()->MaxWalkSpeed = AttackMovementSpeed;
-            
+
             Blackboard->SetValueAsBool("CanSeePlayer", true);
         }
         else

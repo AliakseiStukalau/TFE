@@ -15,76 +15,72 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireChangeDelegate);
 UENUM(BlueprintType)
 enum class EFireIntensityState : uint8
 {
-	None = 0 UMETA(DisplayName = "None"),
-	Smoke = 1 UMETA(DisplayName = "Smoke"),
-	Low = 2 UMETA(DisplayName = "Low"),
-	Middle = 3 UMETA(DisplayName = "Middle"),
-	Full = 4 UMETA(DisplayName = "Full")
+    None = 0 UMETA(DisplayName = "None"),
+    Smoke = 1 UMETA(DisplayName = "Smoke"),
+    Low = 2 UMETA(DisplayName = "Low"),
+    Middle = 3 UMETA(DisplayName = "Middle"),
+    Full = 4 UMETA(DisplayName = "Full")
 };
 
 
 UCLASS()
 class TFE_API AFireplace : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
+    GENERATED_BODY()
 
-	// Sets default values for this actor's properties
-	AFireplace();
+public:
+
+    // Sets default values for this actor's properties
+    AFireplace();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
-	void DisableEmmiters();
+    void DisableEmitters();
+    void ResetFire();
 
-	void ResetFire();
+    void SetFullPower();
+    void SetMiddlePower();
+    void SetLowPower();
+    void SetSmoke();
 
-	void SetFullPower();
+    void DecreaseFire();
 
-	void SetMiddlePower();
+    UFUNCTION()
+    void OnDropTrunk();
 
-	void SetLowPower();
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    USceneComponent* Scene;
 
-	void SetSmoke();
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UStaticMeshComponent* FireplaceMesh;
 
-	void DecreaseFire();
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UBoxComponent* BoxCollision;
 
-	UFUNCTION()
-	void OnDropTrunk();
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UParticleSystemComponent* ParticleSystemFire;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USceneComponent* Scene;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    EFireIntensityState FireState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* FireplaceMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPointLightComponent* PointLightOuter;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBoxComponent* BoxCollision;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UParticleSystemComponent* ParticleSystemFire;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EFireIntensityState FireState;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UPointLightComponent *PointLightOuter;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UPointLightComponent* PointLightInner;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPointLightComponent* PointLightInner;
 
 
-	FFireChangeDelegate OnFireChange;
+    FFireChangeDelegate OnFireChange;
 protected:
 
-	FTimerHandle DecreaseFireTimerHandle;
+    FTimerHandle DecreaseFireTimerHandle;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float FireDecreaseTime;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float FireDecreaseTime;
 };

@@ -1,5 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Tip.h"
 
+TipId UTip::GetId()
+{
+    return Id;
+}
+
+FText UTip::GetText()
+{
+    return TipText;
+}

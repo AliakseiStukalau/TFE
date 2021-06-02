@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "TFECharacter.h"
 #include "Fireplace.h"
 #include "WoodenTrunk.h"
@@ -19,7 +17,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ATFECharacter
@@ -123,7 +120,7 @@ void ATFECharacter::BeginPlay()
     OnShowTip.Broadcast(NewObject<UGetAxeTip>());
 
     GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATFECharacter::OnCharacterCapsuleBeginOverlap);
-    GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ATFECharacter::OnCaracterCapsuleHit);
+    GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ATFECharacter::OnCharacterCapsuleHit);
 
     if (BoxCollision)
     {
@@ -134,7 +131,7 @@ void ATFECharacter::BeginPlay()
 
 void ATFECharacter::ReportLocation()
 {
-    FVector location = GetActorLocation();
+    const FVector location = GetActorLocation();
 
     UE_LOG(LogTemp, Display, TEXT("Player location: %s"), *(location.ToString()));
 }
@@ -175,7 +172,6 @@ void ATFECharacter::Grab()
             OnHideTip.Broadcast(NewObject<UGrabTip>()->GetId());
         }
     }
-
 }
 
 void ATFECharacter::HandleReleaseObject()
@@ -258,7 +254,7 @@ void ATFECharacter::ChangePersonView()
 
 void ATFECharacter::SetFirstPersonView()
 {
-    FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true);
+    const FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true);
     GetFollowCamera()->AttachToComponent(GetMesh(), rules, "head");
     GetFollowCamera()->AddLocalOffset(FVector(-10.0, 26.0, 0.0), false, nullptr, ETeleportType::TeleportPhysics);
     GetFollowCamera()->AddLocalRotation(FRotator(-90.0, 0.0, 0.0).Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
@@ -271,15 +267,15 @@ void ATFECharacter::SetThirdPersonView()
 {
     bUseControllerRotationYaw = false;
 
-    FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true);
+    const FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, true);
     GetFollowCamera()->AttachToComponent(GetCameraBoom(), rules, "head");
 
-    FRotator deltaRotation(GetCapsuleComponent()->GetRelativeRotation().Pitch * (-1), 0, 0);
+    const FRotator deltaRotation(GetCapsuleComponent()->GetRelativeRotation().Pitch * (-1), 0, 0);
     GetCapsuleComponent()->AddLocalRotation(deltaRotation.Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
 
     GetFollowCamera()->AddLocalRotation(FRotator(90.0, -90.0, 0).Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
 
-    FVector deltaLocation = GetFollowCamera()->GetRelativeLocation() * (-1);
+    const FVector deltaLocation = GetFollowCamera()->GetRelativeLocation() * (-1);
     GetFollowCamera()->AddLocalOffset(deltaLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
@@ -290,7 +286,7 @@ void ATFECharacter::OnCharacterCapsuleBeginOverlap(UPrimitiveComponent* Overlapp
 
     if (pAxe)
     {
-        FAttachmentTransformRules attachmentRules(EAttachmentRule::SnapToTarget,
+        const FAttachmentTransformRules attachmentRules(EAttachmentRule::SnapToTarget,
             EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
         pAxe->AttachToComponent(GetMesh(), attachmentRules, FName("weapon_r"));
 
@@ -331,10 +327,10 @@ void ATFECharacter::OnBoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComp
     }
 }
 
-void ATFECharacter::OnCaracterCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+void ATFECharacter::OnCharacterCapsuleHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-    FString actorName = UKismetSystemLibrary::GetDisplayName(OtherActor);
+    const FString actorName = UKismetSystemLibrary::GetDisplayName(OtherActor);
     if (GEngine)
         GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Cyan, actorName);
 

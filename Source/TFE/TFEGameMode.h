@@ -9,10 +9,10 @@
 UCLASS(minimalapi)
 class ATFEGameMode : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	ATFEGameMode();
+    ATFEGameMode();
 };
 
 

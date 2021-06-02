@@ -11,48 +11,43 @@
 UCLASS()
 class TFE_API AGhost : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
 
-	AGhost();
+    AGhost();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    UFUNCTION()
+    void OnTargetPerceptionUpd(AActor* Actor, FAIStimulus Stimulus);
 
-	UFUNCTION()
-	void OnTargetPerceptionUpd(AActor* Actor, FAIStimulus Stimulus);
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UParticleSystemComponent* SmokePS;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UParticleSystemComponent* SmokePS;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UStaticMeshComponent* GhostHeadMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* GhostHeadMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UAIPerceptionComponent* AIPerception;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UAIPerceptionComponent* AIPerception;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UAISenseConfig_Sight* AISightConfig;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UAISenseConfig_Sight* AISightConfig;
-
-	UBlackboardComponent* Blackboard;
+    UBlackboardComponent* Blackboard;
 
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float PursuitRadius;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	float WalkRadius;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    float PursuitRadius;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    float WalkRadius;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-	bool IsPlayerDetected;
+    bool IsPlayerDetected;
 
-	FVector InitialLocation;
+    FVector InitialLocation;
 
     float AttackMovementSpeed;
-	float UsualMovementSpeed;
-
-
+    float UsualMovementSpeed;
 };

@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,19 +5,17 @@
 #include "Runtime/UMG/Public/UMG.h"
 #include "StaticTipsWidget.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class TFE_API UStaticTipsWidget : public UUserWidget
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	UStaticTipsWidget(const FObjectInitializer& objectInitializer);
+    UStaticTipsWidget(const FObjectInitializer& objectInitializer);
 
-	virtual void NativeConstruct() override;
+    virtual void NativeConstruct() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	UTextBlock* TipTB1;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UTextBlock* TipTB1;
 };

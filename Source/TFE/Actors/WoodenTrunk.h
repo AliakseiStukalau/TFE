@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,26 +9,16 @@
 UCLASS()
 class TFE_API AWoodenTrunk : public AActor
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
 
-	// Sets default values for this actor's properties
-	AWoodenTrunk();
+    // Sets default values for this actor's properties
+    AWoodenTrunk();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UStaticMeshComponent* TrunkMesh;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* TrunkMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBoxComponent *BoxCollision;
-
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UBoxComponent* BoxCollision;
 };
