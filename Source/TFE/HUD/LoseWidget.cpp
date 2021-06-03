@@ -1,4 +1,5 @@
 #include "LoseWidget.h"
+#include "../TFEGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -20,6 +21,12 @@ void ULoseWidget::NativeConstruct()
 
     ButtonRestart->OnClicked.AddDynamic(this, &ULoseWidget::OnRestartClick);
     ButtonQuit->OnClicked.AddDynamic(this, &ULoseWidget::OnQuitClick);
+
+    ATFEGameState* gameState = Cast<ATFEGameState>(GetWorld()->GetGameState());
+    if(gameState)
+    {
+        ResultSeconds = static_cast<int>((FDateTime::Now() - gameState->StartPlayTime).GetTotalSeconds());
+    }
 }
 
 ULoseWidget::ULoseWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)

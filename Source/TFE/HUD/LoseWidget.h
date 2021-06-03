@@ -37,4 +37,7 @@ public:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     EPlayerLoseCause LoseCause;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    int ResultSeconds;
 };

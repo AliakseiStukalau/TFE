@@ -14,4 +14,9 @@ class TFE_API ATFEGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FDateTime StartPlayTime;
 };
