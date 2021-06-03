@@ -11,6 +11,8 @@ AFoliageTree::AFoliageTree()
 
     TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeMesh_"));
     RootComponent = TreeMesh;
+
+    TreeMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
 }
 
 // Called when the game starts or when spawned
