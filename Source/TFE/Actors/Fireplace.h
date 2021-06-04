@@ -80,7 +80,5 @@ public:
 protected:
 
     FTimerHandle DecreaseFireTimerHandle;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float FireDecreaseTime;
 };

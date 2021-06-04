@@ -1,13 +1,15 @@
 #include "FoliageTree.h"
 #include "TFECharacter.h"
 #include "WoodenTrunk.h"
+#include "Kismet/GameplayStatics.h"
+#include "../DifficultyLevel.h"
+#include "../TFEGameInstance.h"
 
 // Sets default values
 AFoliageTree::AFoliageTree()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-    RespawnTime = 600; //sec
 
     TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeMesh_"));
     RootComponent = TreeMesh;
@@ -19,6 +21,16 @@ AFoliageTree::AFoliageTree()
 void AFoliageTree::BeginPlay()
 {
     Super::BeginPlay();
+
+    UTFEGameInstance* gameInstance = Cast<UTFEGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+    if (gameInstance)
+    {
+        UDifficultyLevel* dLevel = gameInstance->GetCurrentDifficulty();
+        RespawnTime = dLevel->TreeRespawnTime;
+    }
+    else
+        RespawnTime = 600; //sec
+
     TreeMesh->OnComponentHit.AddDynamic(this, &AFoliageTree::OnCompHit);
 }
 

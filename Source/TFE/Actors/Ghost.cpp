@@ -3,6 +3,8 @@
 #include "AIController.h"
 #include "TFECharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "TFE/DifficultyLevel.h"
+#include "TFE/TFEGameInstance.h"
 
 // Sets default values
 AGhost::AGhost()
@@ -10,10 +12,6 @@ AGhost::AGhost()
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
     IsPlayerDetected = false;
-    AttackMovementSpeed = 650.0;
-    UsualMovementSpeed = 400.0;
-    PursuitRadius = 4000.0;
-    WalkRadius = 3000.0;
 
     const ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/ParticleSystems/PS_GhostSmoke.PS_GhostSmoke'"));
     SmokePS = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SmokePS"));
@@ -32,9 +30,6 @@ AGhost::AGhost()
     GhostHeadMesh->SetMaterial(0, headMI.Object);
 
     AISightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("AISightConfig"));
-    AISightConfig->SightRadius = 1000;
-    AISightConfig->LoseSightRadius = 1200;
-    AISightConfig->PeripheralVisionAngleDegrees = 70;
     AISightConfig->DetectionByAffiliation.bDetectEnemies = true;
     AISightConfig->DetectionByAffiliation.bDetectNeutrals = true;
     AISightConfig->DetectionByAffiliation.bDetectFriendlies = true;
@@ -48,6 +43,32 @@ AGhost::AGhost()
 void AGhost::BeginPlay()
 {
     Super::BeginPlay();
+
+    UTFEGameInstance* gameInstance = Cast<UTFEGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+    if (gameInstance)
+    {
+        UDifficultyLevel* dLevel = gameInstance->GetCurrentDifficulty();
+        AttackMovementSpeed = dLevel->ghostStats.GhostPursuitSpeed;
+        UsualMovementSpeed = dLevel->ghostStats.GhostWalkSpeed;
+        PursuitRadius = dLevel->ghostStats.GhostPursuitRadius;
+        WalkRadius = dLevel->ghostStats.GhostWalkRadius;
+
+        AISightConfig->SightRadius = dLevel->ghostStats.ghostSightRadius;
+        AISightConfig->LoseSightRadius = 1.2 * AISightConfig->SightRadius;
+        AISightConfig->PeripheralVisionAngleDegrees = dLevel->ghostStats.ghostSightHalfAngle;
+    }
+    else
+    {
+        AttackMovementSpeed = 650.0;
+        UsualMovementSpeed = 400.0;
+        PursuitRadius = 4000.0;
+        WalkRadius = 3000.0;
+
+        AISightConfig->SightRadius = 1000;
+        AISightConfig->LoseSightRadius = 1.2 * AISightConfig->SightRadius;
+        AISightConfig->PeripheralVisionAngleDegrees = 70;
+    }
+
 
     AAIController* aic = Cast<AAIController>(this->GetController());
     Blackboard = (aic->GetBlackboardComponent());

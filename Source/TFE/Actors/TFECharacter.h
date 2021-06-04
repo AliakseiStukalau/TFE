@@ -50,6 +50,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USceneComponent* GrabLocation;
 
+    UPROPERTY()
     class UPhysicsHandleComponent* PhysicsHandle;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)

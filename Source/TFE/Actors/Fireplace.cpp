@@ -2,13 +2,14 @@
 #include "WoodenTrunk.h"
 #include "Kismet/GameplayStatics.h"
 #include "TFECharacter.h"
+#include "TFE/DifficultyLevel.h"
+#include "TFE/TFEGameInstance.h"
 
 // Sets default values
 AFireplace::AFireplace()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-    FireDecreaseTime = 7; //sec
 
     Scene = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));
     RootComponent = Scene;
@@ -51,8 +52,18 @@ void AFireplace::BeginPlay()
 {
     Super::BeginPlay();
 
-    ATFECharacter* pPlayer = Cast<ATFECharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+    UTFEGameInstance* gameInstance = Cast<UTFEGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+    if (gameInstance)
+    {
+        UDifficultyLevel* dLevel = gameInstance->GetCurrentDifficulty();
 
+        FireDecreaseTime = dLevel->FireExtinctionTime;
+    }
+    else
+        FireDecreaseTime = 7;
+
+
+    ATFECharacter* pPlayer = Cast<ATFECharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
     if (pPlayer)
     {
         pPlayer->OnDropTrunk.AddDynamic(this, &AFireplace::OnDropTrunk);

@@ -2,6 +2,8 @@
 #include "TFECharacter.h"
 #include "../HUD/LoseWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "TFE/DifficultyLevel.h"
+#include "TFE/TFEGameInstance.h"
 
 // Sets default values
 APlayerChild::APlayerChild()
@@ -13,7 +15,6 @@ APlayerChild::APlayerChild()
     const ConstructorHelpers::FObjectFinder<UStaticMesh> meshAsset(TEXT("StaticMesh'/Game/Meshes/SittingChildMesh.SittingChildMesh'"));
     ChildMesh->SetStaticMesh(meshAsset.Object);
     RootComponent = ChildMesh;
-    HitPoints = 50;
     Fireplace = nullptr;
 }
 
@@ -21,6 +22,16 @@ APlayerChild::APlayerChild()
 void APlayerChild::BeginPlay()
 {
     Super::BeginPlay();
+
+    UTFEGameInstance* gameInstance = Cast<UTFEGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+    if (gameInstance)
+    {
+        UDifficultyLevel* dLevel = gameInstance->GetCurrentDifficulty();
+        HitPoints = dLevel->ChildInitHitPoints;
+    }
+    else
+        HitPoints = 50;
+
 
     InitFireplace();
 

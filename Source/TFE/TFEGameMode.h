@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/GameModeBase.h"
 #include "TFEGameMode.generated.h"
+
 
 UCLASS(minimalapi)
 class ATFEGameMode : public AGameModeBase
