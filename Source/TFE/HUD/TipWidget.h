@@ -19,6 +19,6 @@ public:
     void ShowTip(FText& text);
     void HideTip();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UTextBlock* TipTextBlock;
 };

@@ -29,10 +29,10 @@ public:
     UFUNCTION()
     void OnQuitClick();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UButton* ButtonRestart;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UButton* ButtonQuit;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

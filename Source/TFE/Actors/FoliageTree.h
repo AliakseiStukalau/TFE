@@ -22,7 +22,7 @@ protected:
 
     float RespawnTime;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* TreeMesh;
 
 };

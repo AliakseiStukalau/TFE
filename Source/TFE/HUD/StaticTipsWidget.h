@@ -16,6 +16,6 @@ public:
 
     virtual void NativeConstruct() override;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UTextBlock* TipTB1;
 };

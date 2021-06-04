@@ -28,15 +28,12 @@ public:
     virtual void Tick(float DeltaTime) override;
 
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* ChildMesh;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float HitPoints;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float HitPointsChangePerSecond;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     AFireplace* Fireplace;
+
+    float HitPoints;
+    float HitPointsChangePerSecond;
 };

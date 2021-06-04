@@ -16,9 +16,9 @@ public:
     // Sets default values for this actor's properties
     AWoodenTrunk();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* TrunkMesh;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UBoxComponent* BoxCollision;
 };

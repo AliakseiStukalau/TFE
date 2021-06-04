@@ -21,10 +21,10 @@ public:
     UFUNCTION()
     void UpdatePercent();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     class UTextBlock* HealthPercentTxt;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     class UProgressBar* HealthPercentBar;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

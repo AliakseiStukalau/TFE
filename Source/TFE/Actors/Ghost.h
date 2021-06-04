@@ -20,18 +20,19 @@ public:
     UFUNCTION()
     void OnTargetPerceptionUpd(AActor* Actor, FAIStimulus Stimulus);
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UParticleSystemComponent* SmokePS;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* GhostHeadMesh;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UAIPerceptionComponent* AIPerception;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UAISenseConfig_Sight* AISightConfig;
 
+    UPROPERTY()
     UBlackboardComponent* Blackboard;
 
 

@@ -22,9 +22,9 @@ public:
     UFUNCTION()
     void OnBackClicked();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UButton* ButtonBack;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     USlider* SliderDifficulty;
 };

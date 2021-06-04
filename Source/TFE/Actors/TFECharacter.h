@@ -44,18 +44,16 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UBoxComponent* BoxCollision;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UPrimitiveComponent* TrunkPhysicsObject;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
     USceneComponent* GrabLocation;
 
     UPROPERTY()
     class UPhysicsHandleComponent* PhysicsHandle;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float GrabDistance;
-
     bool IsHolding;
     bool HasWeapon;
     bool IsCloseToGrabbableObject;
