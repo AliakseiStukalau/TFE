@@ -29,11 +29,17 @@ public:
     UFUNCTION()
     void OnQuitClick();
 
+    UFUNCTION()
+    void OnGoMenu();
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UButton* ButtonRestart;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
     UButton* ButtonQuit;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (BindWidget))
+    UButton* ButtonGoMenu;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     EPlayerLoseCause LoseCause;

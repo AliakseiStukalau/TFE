@@ -21,6 +21,7 @@ void ULoseWidget::NativeConstruct()
 
     ButtonRestart->OnClicked.AddDynamic(this, &ULoseWidget::OnRestartClick);
     ButtonQuit->OnClicked.AddDynamic(this, &ULoseWidget::OnQuitClick);
+    ButtonGoMenu->OnClicked.AddDynamic(this, &ULoseWidget::OnGoMenu);
 
     ATFEGameState* gameState = Cast<ATFEGameState>(GetWorld()->GetGameState());
     if(gameState)
@@ -35,10 +36,16 @@ ULoseWidget::ULoseWidget(const FObjectInitializer& objectInitializer) : Super(ob
 
 void ULoseWidget::OnRestartClick()
 {
-    UGameplayStatics::OpenLevel(GetWorld(), FName(*GetWorld()->GetName()), false);
+    UGameplayStatics::OpenLevel(GetWorld(), FName(*GetWorld()->GetName()));
 }
 
 void ULoseWidget::OnQuitClick()
 {
     UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
 }
+
+void ULoseWidget::OnGoMenu()
+{
+    UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+}
+
